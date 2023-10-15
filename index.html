@@ -1,1 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Juego de Preguntas sobre Lípidos</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('_62a6d7c9-c80d-46b1-82db-e3d67c775e52.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+            background-color: #f0f0f0;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #quiz-container {
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+        #question {
+            font-size: 20px;
+            margin: 20px 0;
+            color: #333;
+        }
+        #options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .option {
+            background-color: #4caf50;
+            color: #fff;
+            font-size: 16px;
+            padding: 10px;
+            cursor: pointer;
+            border: 2px solid #388e3c;
+            border-radius: 5px;
+        }
+        .option:hover {
+            background-color: #45a049;
+        }
+        .option:focus {
+            outline: none;
+        }
+        #score {
+            font-size: 18px;
+            color: #777;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <audio controls>
+        <source src="https://example.com/your-audio.mp3" type="audio/mpeg">
+        Tu navegador no soporta la reproducción de audio.
+    </audio>
 
+    <div id="quiz-container">
+        <h1>Juego de Preguntas sobre Lípidos</h1>
+        <div id="question"></div>
+        <div id="options"></div>
+        <div id="score">Puntuación: 0</div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "¿Qué son los lípidos?",
+                options: ["Carbohidratos", "Grasas", "Proteínas", "Vitaminas"],
+                correctAnswer: 1,
+            },
+            {
+                question: "¿Cuál es la principal función de los lípidos en el cuerpo?",
+                options: ["Almacenar energía", "Transportar oxígeno", "Proteger contra infecciones", "Regulación de la temperatura"],
+                correctAnswer: 0,
+            },
+            {
+                question: "¿En cuál de los siguientes alimentos se encuentran lípidos?",
+                options: ["Manzanas", "Pollo a la parrilla", "Lechuga", "Arroz"],
+                correctAnswer: 1,
+            },
+            {
+                question: "¿Cuál es el lípido más común en los aceites vegetales?",
+                options: ["Colesterol", "Triglicéridos", "Ácidos grasos saturados", "Ácidos grasos insaturados"],
+                correctAnswer: 1,
+            },
+            {
+                question: "¿Cuál es el efecto de las grasas trans en la salud?",
+                options: ["Aumentan el colesterol HDL", "Aumentan el riesgo de enfermedades del corazón", "Mejoran la salud cardiovascular", "Reducen la presión arterial"],
+                correctAnswer: 1,
+            },
+            {
+                question: "¿Cuál es la principal fuente de ácidos grasos omega-3?",
+                options: ["Pescado graso", "Carne roja", "Nueces", "Huevos"],
+                correctAnswer: 0,
+            },
+            {
+                question: "¿Qué tipo de lípido se encuentra en las membranas celulares?",
+                options: ["Colesterol", "Fosfolípidos", "Triglicéridos", "Ceramidas"],
+                correctAnswer: 1,
+            },
+            {
+                question: "¿Cuál es la principal función de los fosfolípidos en el cuerpo?",
+                options: ["Almacenar energía", "Formar membranas celulares", "Regular la glucosa en sangre", "Transportar oxígeno"],
+                correctAnswer: 1,
+            },
+            {
+                question: "¿Cuál es la fuente principal de ácidos grasos saturados en la dieta?",
+                options: ["Aceite de oliva", "Aguacate", "Mantequilla", "Avena"],
+                correctAnswer: 2,
+            },
+            {
+                question: "¿Cuál es la principal fuente de colesterol en la dieta?",
+                options: ["Huevos", "Plátanos", "Lechuga", "Pan integral"],
+                correctAnswer: 0,
+            },
+            {
+                question: "¿En qué grupo de lípidos se encuentran el colesterol y los esteroides?",
+                options: ["Triglicéridos", "Ceramidas", "Fosfolípidos", "Esteroides"],
+                correctAnswer: 3,
+            },
+            {
+                question: "¿Cuál es el papel de los lípidos en la absorción de vitaminas liposolubles?",
+                options: ["No tienen ningún papel en la absorción de vitaminas", "Facilitan la absorción de vitaminas liposolubles", "Inhiben la absorción de vitaminas", "Solo absorben la vitamina C"],
+                correctAnswer: 1,
+            },
+            {
+                question: "¿Cuál es el lípido que se acumula en las arterias y puede causar aterosclerosis?",
+                options: ["Colesterol LDL", "Triglicéridos", "Colesterol HDL", "Fosfolípidos"],
+                correctAnswer: 0,
+            },
+            {
+                question: "¿Cuál es el valor calórico de un gramo de lípidos?",
+                options: ["2 calorías", "4 calorías", "7 calorías", "9 calorías"],
+                correctAnswer: 3,
+            },
+            {
+                question: "¿En cuál de los siguientes alimentos se encuentra una gran cantidad de ácidos grasos trans?",
+                options: ["Aceite de oliva", "Margarina", "Aguacate", "Pescado"],
+                correctAnswer: 1,
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        const questionElement = document.getElementById("question");
+        const optionsElement = document.getElementById("options");
+        const scoreElement = document.getElementById("score");
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            questionElement.textContent = question.question;
+
+            optionsElement.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement("div");
+                optionElement.className = "option";
+                optionElement.textContent = option;
+
+                optionElement.addEventListener("click", () => checkAnswer(index));
+
+                optionsElement.appendChild(optionElement);
+            });
+
+            scoreElement.textContent = `Puntuación: ${score}`;
+        }
+
+        function checkAnswer(selectedOption) {
+            const question = questions[currentQuestion];
+            if (selectedOption === question.correctAnswer) {
+                score++;
+            }
+
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+                showQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            let message = "¡Juego completado!";
+            if (score < questions.length / 2) {
+                message += " ¡Puedes hacerlo mejor!";
+            } else {
+                message += " ¡Buen trabajo!";
+            }
+
+            questionElement.textContent = message;
+            optionsElement.innerHTML = '';
+            scoreElement.textContent = `Puntuación final: ${score}`;
+        }
+
+        showQuestion();
+    </script>
+</body>
+</html>
